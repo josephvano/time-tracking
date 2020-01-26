@@ -25,6 +25,29 @@ export default class App extends React.Component {
     ]
   };
 
+  componentDidMount() {
+    const TIME_INTERVAL = 1000; //ms
+
+    this.intervalId = setInterval(() => {
+      const {timers}      = this.state;
+
+      this.setState({
+        timers: timers.map(timer => {
+          const {elapsed, isRunning} = timer;
+
+          return {
+            ...timer,
+            elapsed: isRunning ? elapsed + TIME_INTERVAL : elapsed
+          }
+        })
+      });
+    }, TIME_INTERVAL);
+  }
+
+  componentWillUnmount(){
+    clearInterval(this.intervalId);
+  }
+
   handleForRemove = (attrs) => {
     this.setState({
       timers: this.state.timers.filter(timer => timer.id !== attrs.id)
@@ -59,6 +82,24 @@ export default class App extends React.Component {
     })
   };
 
+  toggleTimer = (timerId) => {
+    const { timers } = this.state;
+    this.setState({
+      timers: timers.map( timer => {
+        const {id, isRunning} = timer;
+
+        if(id === timerId){
+          return {
+            ...timer,
+            isRunning: !isRunning
+          }
+        }
+
+        return timer;
+      })
+    })
+  };
+
   render() {
     const {timers} = this.state;
 
@@ -82,6 +123,8 @@ export default class App extends React.Component {
                 isRunning={isRunning}
                 onFormSubmit={this.handleForSubmit}
                 onRemove={this.handleForRemove}
+                onStartPress={this.toggleTimer}
+                onStopPress={this.toggleTimer}
               />
             ))
           }
