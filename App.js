@@ -25,6 +25,26 @@ export default class App extends React.Component {
     ]
   };
 
+  handleForSubmit = (attrs) => {
+    const { timers } = this.state;
+
+    this.setState({
+      timers: timers.map( timer => {
+        if(timer.id === attrs.id){
+          const { title, project } = attrs;
+
+          return {
+            ...timer,
+            title,
+            project
+          }
+        }
+
+        return timer;
+      })
+    })
+  };
+
   handleCreateFormSubmit = (timer) => {
     const {timers} = this.state;
 
@@ -54,6 +74,7 @@ export default class App extends React.Component {
                 project={project}
                 elapsed={elapsed}
                 isRunning={isRunning}
+                onFormSubmit={this.handleForSubmit}
               />
             ))
           }
