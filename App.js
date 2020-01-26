@@ -1,5 +1,5 @@
 import React                                from 'react';
-import {StyleSheet, ScrollView, Text, View} from 'react-native';
+import {KeyboardAvoidingView, StyleSheet, ScrollView, Text, View} from 'react-native';
 import uuiidv4                              from 'uuid/v4';
 import EditableTimer                        from './components/EditableTimer';
 import ToggleableTimerForm                  from './components/ToggleableTimerForm';
@@ -108,27 +108,32 @@ export default class App extends React.Component {
         <View style={styles.titleContainer}>
           <Text style={styles.title}>Timers</Text>
         </View>
-        <ScrollView style={styles.timerList}>
-          <ToggleableTimerForm
-            onFormSubmit={this.handleCreateFormSubmit}
-          />
-          {
-            timers.map(({title, project, id, elapsed, isRunning}) => (
-              <EditableTimer
-                key={id}
-                id={id}
-                title={title}
-                project={project}
-                elapsed={elapsed}
-                isRunning={isRunning}
-                onFormSubmit={this.handleForSubmit}
-                onRemove={this.handleForRemove}
-                onStartPress={this.toggleTimer}
-                onStopPress={this.toggleTimer}
-              />
-            ))
-          }
-        </ScrollView>
+        <KeyboardAvoidingView
+          behavior="padding"
+          style={styles.timerListContainer}
+        >
+          <ScrollView style={styles.timerList}>
+            <ToggleableTimerForm
+              onFormSubmit={this.handleCreateFormSubmit}
+            />
+            {
+              timers.map(({title, project, id, elapsed, isRunning}) => (
+                <EditableTimer
+                  key={id}
+                  id={id}
+                  title={title}
+                  project={project}
+                  elapsed={elapsed}
+                  isRunning={isRunning}
+                  onFormSubmit={this.handleForSubmit}
+                  onRemove={this.handleForRemove}
+                  onStartPress={this.toggleTimer}
+                  onStopPress={this.toggleTimer}
+                />
+              ))
+            }
+          </ScrollView>
+        </KeyboardAvoidingView>
       </View>
     );
   }
@@ -136,6 +141,9 @@ export default class App extends React.Component {
 
 const styles = StyleSheet.create({
   appContainer  : {
+    flex: 1
+  },
+  timerListContainer: {
     flex: 1
   },
   titleContainer: {
